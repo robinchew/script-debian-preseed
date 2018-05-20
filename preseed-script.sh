@@ -190,6 +190,6 @@ md5sum `find -follow -type f` > md5sum.txt
 cd -
 create_iso
 sudo umount isoorig
-rm -r isoorig
-rm -r isonew
+sudo rm -r isoorig
+sudo rm -r isonew
 echo "Custom ISO created"
