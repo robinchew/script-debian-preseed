@@ -8,106 +8,107 @@ isopath=$1
 
 ### Function ###
 check_packages () {
-  for i in sudo rsync xorriso isolinux; do
-        if [[ $(dpkg-query -W -f='${Status}\n' $i | awk '{print $1}') == "install" ]] 2>&-
-                then echo -e "${G}OK${N} $i";
-                else echo -e "${R}Not OK${N} $i"
-                     echo -e "${Y}Installing $i${N}"
-                     apt-get install $i
-        fi
-  done
+	for i in sudo rsync xorriso isolinux; do
+		if [[ $(dpkg-query -W -f='${Status}\n' $i | awk '{print $1}') == "install" ]] 2>&-; then
+			echo -e "${G}OK${N} $i";
+		else 
+			echo -e "${R}Not OK${N} $i"
+			echo -e "${Y}Installing $i${N}"
+			apt-get install $i
+		fi
+	done
 }
 
 check_file () {
-  until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
-      echo "Your iso could not be found"
-      read -p "ISO path:" isopath
-  done
+	until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
+		echo "Your iso could not be found"
+		read -p "ISO path:" isopath
+	done
 }
 
 create_folder () {
-  echo "Creating folder for mounting ISO"
-  mkdir isoorig
-  sudo mount -o loop -t iso9660 $isopath isoorig
-  echo "Copying ISO in isonew to allow write permission"
-  mkdir isonew
-  rsync -a -H -exclude=TRANS.TBL isoorig/ isonew
+echo "Creating folder for mounting ISO"
+mkdir isoorig
+sudo mount -o loop -t iso9660 $isopath isoorig
+echo "Copying ISO in isonew to allow write permission"
+mkdir isonew
+rsync -a -H -exclude=TRANS.TBL isoorig/ isonew
 }
 
 edit_path_select () {
-  echo "Entering isonew to edit ISO" 
-  #output iso architecture
-  ARCHITECT2=$(echo isoorig/install.*)
-  ARCHITECT=${ARCHITECT2##*.}
+echo "Entering isonew to edit ISO" 
+#output iso architecture
+ARCHITECT2=$(echo isoorig/install.*)
+ARCHITECT=${ARCHITECT2##*.}
 
-  cd ./isonew 
+cd ./isonew 
 
-  if [[ -f isolinux/txt.cfg ]]; then :
-    else
-      echo -e "${R}isolinux/txt.cfg not found${N}"
-      exit 1
-  fi
-  sudo sed -i "1ilabel netinstall \
-  \n	menu label ^Install Over SSH \
-  \n	menu default \
-  \n	kernel /install.$ARCHITECT/vmlinuz \
-  \n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
-  isolinux/txt.cfg
+	if [[ -f isolinux/txt.cfg ]]; then :
+	else
+		echo -e "${R}isolinux/txt.cfg not found${N}"
+		exit 1
+	fi
+sudo sed -i "1ilabel netinstall \
+\n	menu label ^Install Over SSH \
+\n	menu default \
+\n	kernel /install.$ARCHITECT/vmlinuz \
+\n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
+> isolinux/txt.cfg
 }
 
 edit_auto_select () {
-  for a in isolinux.cfg  prompt.cfg; do
-        if  [[ -f ./isolinux/$a ]]; then :
-        else
-          echo -e "${R}$a not found${N}"
-          exit 1
-        fi
-  done
+	for a in isolinux.cfg  prompt.cfg; do
+		if  [[ -f ./isolinux/$a ]]; then :
+		else
+			echo -e "${R}$a not found${N}"
+			exit 1
+		fi
+	done
 sudo sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
 sudo sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
 }
 
 check_LANG1 () {
-  until [[ $LANG1 != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose installation language (en_US, fr_FR,...):" LANG1
-  done
+	until [[ $LANG1 != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose installation language (en_US, fr_FR,...):" LANG1
+	done
 }
 check_KEYMAP2 () {
-  until [[ $KEYMAP2 != "" ]]; do
-      echo "Can't be empty"
-     read -p "Choose keymap:" KEYMAP2
-  done
+	until [[ $KEYMAP2 != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose keymap:" KEYMAP2
+	done
 }
 check_YOURHOSTNAME () {
-  until [[ $YOURHOSTNAME != "" ]]; do
-      echo "Can't be empty"
-     read -p "Choose Hostname:" YOURHOSTNAME
-  done
+	until [[ $YOURHOSTNAME != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose Hostname:" YOURHOSTNAME
+	done
 }
 check_YOURIP () {
-  until [[ $YOURIP != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose IP for SSH (usually 192.168.1.XX):" YOURIP
-  done
+	until [[ $YOURIP != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose IP for SSH (usually 192.168.1.XX):" YOURIP
+	done
 }
 check_GATEWAY () {
-  until [[ $GATEWAY != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose IP for GATEWAY (usallly 192.168.1.1):" GATEWAY
-  done
+	until [[ $GATEWAY != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose IP for GATEWAY (usallly 192.168.1.1):" GATEWAY
+	done
 }
 check_DNS () {
-  until [[ $DNS != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose IP for NAMESERVER (usally 192.168.1.1):" DNS
-  done
+	until [[ $DNS != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose IP for NAMESERVER (usally 192.168.1.1):" DNS
+	done
 }
 check_YOURPASS () {
-  until [[ $YOURPASS != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose PASSWORD for SSH installation:" YOURPASS
-  done
+	until [[ $YOURPASS != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose PASSWORD for SSH installation:" YOURPASS
+	done
 }
 check_EVERYTHING () {
 	printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
@@ -159,14 +160,14 @@ printf "#### Contents of the preconfiguration file  \
 > preseed.cfg
 }
 create_iso () {
-  until [[ $YOURISO != "" ]]; do
-      echo "Can't be empty"
-      read -p "Choose your ISO name:" YOURISO
-  done
-  xorriso -as mkisofs -o $YOURISO.iso \
-          -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
-          -c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot \
-          -boot-load-size 4 -boot-info-table isonew
+	until [[ $YOURISO != "" ]]; do
+		echo "Can't be empty"
+		read -p "Choose your ISO name:" YOURISO
+	done
+xorriso	-as mkisofs -o $YOURISO.iso \
+	-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
+	-c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot \
+	-boot-load-size 4 -boot-info-table isonew
 }
 ### End function ###
 
