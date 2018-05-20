@@ -7,3 +7,6 @@ Need packages:
     xorriso
     isolinux
 
+
+# How to use 
+bash -c "$(curl https://raw.githubusercontent.com/lalalolo49/script-debian-preseed/master/preseed-script.sh)" _ <put_your_iso_name_here>
