@@ -14,7 +14,7 @@ check_packages () {
 		else 
 			echo -e "${R}Not OK${N} $i"
 			echo -e "${Y}Installing $i${N}"
-			apt-get install $i
+			sudo apt-get install $i
 		fi
 	done
 }
