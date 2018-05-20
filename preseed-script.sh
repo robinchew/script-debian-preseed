@@ -110,12 +110,12 @@ check_YOURPASS () {
   done
 }
 check_EVERYTHING () {
-        printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
+	printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
 	echo "Is that correct ?"
-        select ANSWER1 in "Yes" "No"; do
-                case $ANSWER1 in
-                        Yes ) :; break;;
-                        No ) echo "What do you want to change ?"; exit;;
+	select ANSWER1 in "Yes" "No"; do
+		case $ANSWER1 in
+			Yes ) :; break;;
+			No ) echo "What do you want to change ?"; exit;;
 
 		esac
 	done
