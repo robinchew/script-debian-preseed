@@ -33,6 +33,7 @@ sudo mount -o loop -t iso9660 $isopath isoorig
 echo "Copying ISO in isonew to allow write permission"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL isoorig/ isonew
+sudo chmod 750 ./isonew
 }
 
 edit_path_select () {
