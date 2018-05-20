@@ -109,6 +109,17 @@ check_YOURPASS () {
       read -p "Choose PASSWORD for SSH installation:" YOURPASS
   done
 }
+check_EVERYTHING () {
+        printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
+	echo "Is that correct ?"
+        select ANSWER1 in "Yes" "No"; do
+                case $ANSWER1 in
+                        Yes ) :; break;;
+                        No ) echo "What do you want to change ?"; exit;;
+
+		esac
+	done
+}
 create_preseed () {
 printf "#### Contents of the preconfiguration file  \
 \n#### Contents of the preconfiguration file  \
@@ -172,6 +183,7 @@ check_YOURIP
 check_GATEWAY
 check_DNS
 check_YOURPASS
+check_EVERYTHING
 create_preseed
 md5sum `find -follow -type f` > md5sum.txt
 cd -
