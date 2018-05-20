@@ -1,3 +1,9 @@
-# debian-ssh-preseed
-# debian-ssh-preseed
-# debian-ssh-preseed
+# Bash script for a custom ISO
+
+Need packages:
+
+    sudo
+    rsync
+    xorriso
+    isolinux
+
