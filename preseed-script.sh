@@ -115,7 +115,7 @@ check_EVERYTHING () {
 	select ANSWER1 in "Yes" "No"; do
 		case $ANSWER1 in
 			Yes ) :; break;;
-			No ) echo "What do you want to change ?"; exit;;
+			No ) echo "Exiting script"; exit;;
 
 		esac
 	done
