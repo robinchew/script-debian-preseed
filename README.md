@@ -10,5 +10,5 @@ Need packages:
 
 # How to use 
 ```bash
-bash -c "$(curl https://raw.githubusercontent.com/lalalolo49/script-debian-preseed/master/preseed-script.sh)" _ <put_your_iso_path_here>
+bash -c "$(curl https://raw.githubusercontent.com/lalalolo49/script-debian-preseed/master/preseed-script.sh)" _ "<put_your_iso_path_here>"
 ```
