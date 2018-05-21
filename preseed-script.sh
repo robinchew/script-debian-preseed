@@ -27,16 +27,16 @@ check_file () {
 }
 
 create_folder () {
-echo "Creating folder for mounting ISO"
+echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
 sudo mount -o loop -t iso9660 $isopath isoorig
-echo "Copying ISO in isonew to allow write permission"
+echo -e "${G}Copying ISO in isonew to allow write permission${N}"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
 }
 
 edit_path_select () {
-echo "Entering isonew to edit ISO" 
+echo -e "${G}Entering isonew to edit ISO${N}" 
 #output iso architecture
 ARCHITECT2=$(echo isoorig/install.*)
 ARCHITECT=${ARCHITECT2##*.}
@@ -69,49 +69,49 @@ sudo sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
 
 check_LANG1 () {
 	until [[ $LANG1 != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose installation language (en_US, fr_FR,...):" LANG1
 	done
 }
 check_KEYMAP2 () {
 	until [[ $KEYMAP2 != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose keymap:" KEYMAP2
 	done
 }
 check_YOURHOSTNAME () {
 	until [[ $YOURHOSTNAME != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose Hostname:" YOURHOSTNAME
 	done
 }
 check_YOURIP () {
 	until [[ $YOURIP != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose IP for SSH (usually 192.168.1.XX):" YOURIP
 	done
 }
 check_GATEWAY () {
 	until [[ $GATEWAY != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose IP for GATEWAY (usallly 192.168.1.1):" GATEWAY
 	done
 }
 check_DNS () {
 	until [[ $DNS != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose IP for NAMESERVER (usally 192.168.1.1):" DNS
 	done
 }
 check_YOURPASS () {
 	until [[ $YOURPASS != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose PASSWORD for SSH installation:" YOURPASS
 	done
 }
 check_EVERYTHING () {
 	printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
-	echo "Is that correct ?"
+	echo -e "${R}Is that correct ?${N} (Choose a number)"
 	select ANSWER1 in "Yes" "No"; do
 		case $ANSWER1 in
 			Yes ) :; break;;
@@ -160,7 +160,7 @@ printf "#### Contents of the preconfiguration file  \
 }
 create_iso () {
 	until [[ $YOURISO != "" ]]; do
-		echo "Can't be empty"
+		echo -e "${R}Can't be empty${N}"
 		read -p "Choose your ISO name:" YOURISO
 	done
 xorriso	-as mkisofs -o $YOURISO.iso \
