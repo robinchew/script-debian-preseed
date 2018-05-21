@@ -32,8 +32,7 @@ mkdir isoorig
 sudo mount -o loop -t iso9660 $isopath isoorig
 echo "Copying ISO in isonew to allow write permission"
 mkdir isonew
-rsync -a -H -exclude=TRANS.TBL isoorig/ isonew
-sudo chmod 750 ./isonew
+rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
 }
 
 edit_path_select () {
@@ -53,8 +52,7 @@ sudo sed -i "1ilabel netinstall \
 \n	menu label ^Install Over SSH \
 \n	menu default \
 \n	kernel /install.$ARCHITECT/vmlinuz \
-\n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
-> isolinux/txt.cfg
+\n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" isolinux/txt.cfg
 }
 
 edit_auto_select () {
