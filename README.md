@@ -1,6 +1,6 @@
 # Bash script for a custom ISO
 
-Need packages:
+Need packages (checked in the script):
 
     sudo
     rsync
