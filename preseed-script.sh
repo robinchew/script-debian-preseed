@@ -11,7 +11,7 @@ isopath=$1
 check_OPTION () {
 case $1 in
         h)
-                echo -e "${Y}You can put the path of the ISO at 1st argument of$
+                echo -e "${Y}You can put the path of the ISO at 1st argument of the script${N}"
                 echo ""
                 echo "Option            Meaning"
                 echo "-h                Show this help"
