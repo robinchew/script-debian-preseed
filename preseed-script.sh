@@ -1,4 +1,5 @@
 #!/bin/bash
+echo ""
 echo "Preseed script for making a custom ISO of Debian. Installing it through SSH "
 R="\e[31m"
 G="\e[32m"
@@ -7,6 +8,27 @@ Y="\e[93m"
 isopath=$1
 
 ### Function ###
+check_OPTION () {
+case $1 in
+        h)
+                echo -e "${Y}You can put the path of the ISO at 1st argument of$
+                echo ""
+                echo "Option            Meaning"
+                echo "-h                Show this help"
+                echo "-clean            Delete folder isonew and isoorig"
+                exit
+                ;;
+        clean)
+                echo -e "${Y}Deleting isoorig and isonew${N}"
+                sudo umount isoorig
+                sudo rm -r isoorig
+                sudo rm -r isonew
+                exit
+                ;;
+        *)
+                :
+esac
+}
 check_packages () {
 	for i in sudo rsync xorriso isolinux; do
 		if [[ $(dpkg-query -W -f='${Status}\n' $i | awk '{print $1}') == "install" ]] 2>&-; then
@@ -52,7 +74,8 @@ sudo sed -i "1ilabel netinstall \
 \n	menu label ^Install Over SSH \
 \n	menu default \
 \n	kernel /install.$ARCHITECT/vmlinuz \
-\n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" isolinux/txt.cfg
+\n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
+isolinux/txt.cfg
 }
 
 edit_auto_select () {
@@ -171,6 +194,7 @@ xorriso	-as mkisofs -o $YOURISO.iso \
 ### End function ###
 
 ### Start script ###
+check_OPTION $1
 check_packages
 check_file
 create_folder
