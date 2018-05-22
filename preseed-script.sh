@@ -15,7 +15,7 @@ case $1 in
                 echo ""
                 echo "Option            Meaning"
                 echo "-h                Show this help"
-                echo "-clean            Delete folder isonew and isoorig"
+                echo "-clean            Delete folder isoorig and isonew"
                 exit
                 ;;
         clean)
