@@ -13,7 +13,7 @@ Need packages (checked in the script):
 bash -c "$(curl https://raw.githubusercontent.com/lalalolo49/script-debian-preseed/master/preseed-script.sh)" _ "<put_your_iso_path_here>"
 
 Options
-h	Show help
-clean	Delete folder isoorig and isonew
+-h	Show help
+-clean	Delete folder isoorig and isonew
 ```
 
