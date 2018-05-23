@@ -10,23 +10,23 @@ isopath=$1
 ### Function ###
 check_OPTION () {
 case $1 in
-        h)
-                echo -e "${Y}You can put the path of the ISO at 1st argument of the script${N}"
-                echo ""
-                echo "Option            Meaning"
-                echo "-h                Show this help"
-                echo "-clean            Delete folder isoorig and isonew"
-                exit
-                ;;
-        clean)
-                echo -e "${Y}Deleting isoorig and isonew${N}"
-                sudo umount isoorig
-                sudo rm -r isoorig
-                sudo rm -r isonew
-                exit
-                ;;
-        *)
-                :
+	-h)
+		echo -e "${Y}You can put the path of the ISO at 1st argument of the script${N}"
+		echo ""
+		echo "Option            Meaning"
+		echo "-h                Show this help"
+		echo "-clean            Delete folder isoorig and isonew"
+		exit
+		;;
+	-clean)
+		echo -e "${Y}Deleting isoorig and isonew${N}"
+		sudo umount isoorig
+		sudo rm -r isoorig
+		sudo rm -r isonew
+		exit
+		;;
+	*)
+		:
 esac
 }
 check_packages () {
