@@ -37,22 +37,20 @@ case $1 in
 esac
 }
 check_PACKAGES () {
-if [[ ! -z $(which yum) ]]; then
-                installer="yum"
-                echo "Packages installer is YUM"
-elif [[ ! -z $(which apt-get) ]]; then
-                installer="apt-get"
-                echo "Packages installer is APT-GET"
+if [[ ! -z $(which apt-get) ]]; then
+                INSTALLER="apt-get"
+                PKG_CHECK="dpkg-query -W"
+		echo "Packages installer is APT-GET"
 fi
 }
 check_packages () {
 	for i in sudo rsync xorriso isolinux; do
-		if [[ $(dpkg-query -W -f='${Status}\n' $i | awk '{print $1}') == "install" ]] 2>&-; then
+		if [[ $($PKG_CHECK $i) ]] 2>&-; then
 			echo -e "${G}OK${N} $i";
 		else 
 			echo -e "${R}Not OK${N} $i"
 			echo -e "${Y}Installing $i${N}"
-			$installer install $i
+			$INSTALLER install $i
 		fi
 	done
 }
