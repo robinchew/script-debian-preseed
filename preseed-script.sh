@@ -36,6 +36,15 @@ case $1 in
 		:
 esac
 }
+check_PACKAGES () {
+if [[ ! -z $(which yum) ]]; then
+                installer="yum"
+                echo "Packages installer is YUM"
+elif [[ ! -z $(which apt-get) ]]; then
+                installer="apt-get"
+                echo "Packages installer is APT-GET"
+fi
+}
 check_packages () {
 	for i in sudo rsync xorriso isolinux; do
 		if [[ $(dpkg-query -W -f='${Status}\n' $i | awk '{print $1}') == "install" ]] 2>&-; then
@@ -43,7 +52,7 @@ check_packages () {
 		else 
 			echo -e "${R}Not OK${N} $i"
 			echo -e "${Y}Installing $i${N}"
-			apt-get install $i
+			$installer install $i
 		fi
 	done
 }
@@ -203,6 +212,7 @@ xorriso	-as mkisofs -o $YOURISO.iso \
 ### Start script ###
 check_SUDO
 check_OPTION $1
+check_PACKAGES
 check_packages
 check_file
 create_folder
