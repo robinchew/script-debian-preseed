@@ -9,7 +9,7 @@ isopath=$1
 
 ### Function ###
 check_SUDO () {
-if [[ $(whoami) != root ]]; then 
+if [[ $(id -u -n) != root ]]; then 
 		echo -e "${R}Please use the script as root${N}"
 		exit; 
 	else : 
