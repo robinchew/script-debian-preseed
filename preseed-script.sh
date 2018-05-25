@@ -20,9 +20,9 @@ case $1 in
 		;;
 	-clean)
 		echo -e "${Y}Deleting isoorig and isonew${N}"
-		sudo umount isoorig
-		sudo rm -r isoorig
-		sudo rm -r isonew
+		umount isoorig
+		rm -r isoorig
+		rm -r isonew
 		exit
 		;;
 	*)
@@ -36,7 +36,7 @@ check_packages () {
 		else 
 			echo -e "${R}Not OK${N} $i"
 			echo -e "${Y}Installing $i${N}"
-			sudo apt-get install $i
+			apt-get install $i
 		fi
 	done
 }
@@ -51,7 +51,7 @@ check_file () {
 create_folder () {
 echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
-sudo mount -o loop -t iso9660 $isopath isoorig
+mount -o loop -t iso9660 $isopath isoorig
 echo -e "${G}Copying ISO in isonew to allow write permission${N}"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
@@ -70,7 +70,7 @@ cd ./isonew
 		echo -e "${R}isolinux/txt.cfg not found${N}"
 		exit 1
 	fi
-sudo sed -i "1ilabel netinstall \
+sed -i "1ilabel netinstall \
 \n	menu label ^Install Over SSH \
 \n	menu default \
 \n	kernel /install.$ARCHITECT/vmlinuz \
@@ -86,8 +86,8 @@ edit_auto_select () {
 			exit 1
 		fi
 	done
-sudo sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
-sudo sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
+sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
+sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
 }
 
 check_LANG1 () {
@@ -212,7 +212,7 @@ create_preseed
 md5sum `find -follow -type f` > md5sum.txt
 cd -
 create_iso
-sudo umount isoorig
-sudo rm -r isoorig
-sudo rm -r isonew
+umount isoorig
+rm -r isoorig
+rm -r isonew
 echo "Custom ISO created"
