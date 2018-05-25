@@ -8,6 +8,13 @@ Y="\e[93m"
 isopath=$1
 
 ### Function ###
+check_SUDO () {
+if [[ $(whoami) != root ]]; then 
+		echo -e "${R}Please use the script as root${N}"
+		exit; 
+	else : 
+fi
+}
 check_OPTION () {
 case $1 in
 	-h)
@@ -194,6 +201,7 @@ xorriso	-as mkisofs -o $YOURISO.iso \
 ### End function ###
 
 ### Start script ###
+check_SUDO
 check_OPTION $1
 check_packages
 check_file
