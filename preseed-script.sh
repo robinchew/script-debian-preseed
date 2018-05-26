@@ -1,6 +1,4 @@
 #!/bin/bash
-echo ""
-echo "Preseed script for making a custom ISO of Debian. Installing it through SSH "
 R="\e[31m"
 G="\e[32m"
 N="\e[0m"
@@ -54,14 +52,12 @@ check_packages () {
 		fi
 	done
 }
-
 check_file () {
 	until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
 		echo "Your iso could not be found"
 		read -p "ISO path:" isopath
 	done
 }
-
 create_folder () {
 echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
@@ -70,7 +66,6 @@ echo -e "${G}Copying ISO in isonew to allow write permission${N}"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
 }
-
 edit_path_select () {
 echo -e "${G}Entering isonew to edit ISO${N}" 
 #output iso architecture
@@ -91,7 +86,6 @@ sed -i "1ilabel netinstall \
 \n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
 isolinux/txt.cfg
 }
-
 edit_auto_select () {
 	for a in isolinux.cfg  prompt.cfg; do
 		if  [[ -f ./isolinux/$a ]]; then :
@@ -103,7 +97,6 @@ edit_auto_select () {
 sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
 sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
 }
-
 check_LANG1 () {
 	until [[ $LANG1 != "" ]]; do
 		echo -e "${R}Can't be empty${N}"
@@ -208,6 +201,8 @@ xorriso	-as mkisofs -o $YOURISO.iso \
 ### End function ###
 
 ### Start script ###
+echo ""
+echo "Preseed script for making a custom ISO of Debian. Installing it through SSH "
 check_SUDO
 check_OPTION $1
 check_PACKAGES
