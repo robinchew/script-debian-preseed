@@ -37,28 +37,29 @@ esac
 check_PACKAGES () {
 if [[ ! -z $(which apt-get) ]]; then
                 INSTALLER="apt-get"
-                PKG_CHECK="dpkg-query -W"
+                PKG_CHECK="dpkg-query -s"
 		echo "Packages installer is APT-GET"
 fi
 }
 check_packages () {
-	for i in sudo rsync xorriso isolinux; do
-		if [[ $($PKG_CHECK $i) ]] 2>&-; then
-			echo -e "${G}OK${N} $i";
-		else 
-			echo -e "${R}Not OK${N} $i"
-			echo -e "${Y}Installing $i${N}"
-			$INSTALLER install $i
-		fi
-	done
+for i in sudo rsync xorriso isolinux; do
+	if [[ $($PKG_CHECK $i) ]] 2>&-; then
+		echo -e "${G}OK${N} $i";
+	else
+		echo -e "${R}Not OK${N} $i"
+		echo -e "${Y}Installing $i${N}"
+		$INSTALLER install $i
+	fi
+done
 }
 check_file () {
-	until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
-		echo "Your iso could not be found"
-		read -p "ISO path:" isopath
-	done
+until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
+	echo "Your iso could not be found"
+	read -p "ISO path:" isopath
+done
 }
 create_folder () {
+# Create folder isoorig and isonew
 echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
 mount -o loop -t iso9660 $isopath isoorig
@@ -68,34 +69,33 @@ rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
 }
 edit_path_select () {
 echo -e "${G}Entering isonew to edit ISO${N}" 
-#output iso architecture
+# Output architecture
 ARCHITECT2=$(echo isoorig/install.*)
 ARCHITECT=${ARCHITECT2##*.}
+cd ./isonew # Enter folder isonew
 
-cd ./isonew 
-
-	if [[ -f isolinux/txt.cfg ]]; then :
-	else
-		echo -e "${R}isolinux/txt.cfg not found${N}"
-		exit 1
-	fi
+if [[ -f isolinux/txt.cfg ]]; then
 sed -i "1ilabel netinstall \
 \n	menu label ^Install Over SSH \
 \n	menu default \
 \n	kernel /install.$ARCHITECT/vmlinuz \
 \n	append auto=true vga=788 file=/cdrom/preseed.cfg initrd=/install.$ARCHITECT/initrd.gz locale=en_US console-keymaps-at/keymap=us" \
 isolinux/txt.cfg
+else
+	echo -e "${R}isolinux/txt.cfg not found${N}"
+	exit 1
+fi
 }
 edit_auto_select () {
-	for a in isolinux.cfg  prompt.cfg; do
-		if  [[ -f ./isolinux/$a ]]; then :
-		else
-			echo -e "${R}$a not found${N}"
-			exit 1
-		fi
-	done
-sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
-sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
+for a in isolinux.cfg  prompt.cfg; do
+	if  [[ -f ./isolinux/$a ]]; then
+		sed -i "s/timeout 0/timeout 4/" isolinux/isolinux.cfg
+		sed -i "s/timeout 0/timeout 4/" isolinux/prompt.cfg
+	else
+		echo -e "${R}$a not found${N}"
+		exit 1
+	fi
+done
 }
 check_LANG1 () {
 	until [[ $LANG1 != "" ]]; do
