@@ -1,11 +1,15 @@
+Only tested on Debian 9
+Doesn't work on Centos since there is no "xorriso"
+
 # Bash script for a custom ISO
 
 Need packages (checked in the script):
 
-    sudo
-    rsync
-    xorriso
     isolinux
+    rsync
+    sudo
+    sed
+    xorriso
 
 
 # How to use 
