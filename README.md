@@ -1,5 +1,5 @@
-Only tested on Debian 9
-Doesn't work on Centos since there is no "xorriso"
+Only tested on Debian 9  
+Doesn't work on Centos since there is no "xorriso"  
 
 # Bash script for a custom ISO
 
