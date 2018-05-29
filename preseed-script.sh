@@ -42,7 +42,7 @@ if [[ ! -z $(which apt-get) ]]; then
 fi
 }
 check_packages () {
-for i in sudo rsync xorriso isolinux sed; do
+for i in rsync xorriso isolinux sed; do
 	if [[ $($PKG_CHECK $i) ]] 2>&-; then
 		echo -e "${G}OK${N} $i";
 	else
