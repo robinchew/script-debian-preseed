@@ -220,7 +220,7 @@ check_DNS
 check_YOURPASS
 check_EVERYTHING
 create_preseed
-md5sum `find -follow -type f` > md5sum.txt
+md5sum "find -follow -type f" > md5sum.txt
 cd -
 create_iso
 umount isoorig
