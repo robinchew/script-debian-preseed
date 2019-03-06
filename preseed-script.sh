@@ -7,7 +7,7 @@ isopath=$1
 
 ### Function ###
 check_SUDO () {
-if [[ $(id -u -n) != root ]]; then 
+if [[ $(id -u) != 0 ]]; then 
 		echo -e "${R}Please use the script as root${N}"
 		exit 1; 
 	else : 
