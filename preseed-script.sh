@@ -152,7 +152,10 @@ printf "#### Contents of the preconfiguration file  \
 
 \nd-i apt-setup/use_mirror boolean false \
 \npopularity-contest popularity-contest/participate boolean false \
-\ntasksel tasksel/first multiselect standard \
+
+\n# Don't install anything like 'XFCE4 Desktop' or 'Standard System Utilities'
+\ntasksel tasksel/first multiselect \
+\nd-i pkgsel/include string openssh-server \
 
 \nd-i grub-installer/only_debian boolean true \
 \nd-i grub-installer/bootdev  string default \
