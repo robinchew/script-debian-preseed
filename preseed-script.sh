@@ -51,17 +51,11 @@ for i in rsync xorriso isolinux sed; do
 	fi
 done
 }
-check_file () {
-until [[ -f $isopath ]] && [[ $isopath != "" ]]; do
-	echo "Your iso could not be found"
-	read -p "ISO path:" isopath
-done
-}
 create_folder () {
 # Create folder isoorig and isonew
 echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
-mount -o loop -t iso9660 $isopath isoorig
+mount -o loop -t iso9660 /home/robin/debian-9.8.0-i386-xfce-CD-1.iso isoorig
 echo -e "${G}Copying ISO in isonew to allow write permission${N}"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
@@ -120,61 +114,30 @@ check_YOURIP () {
 		read -p "Choose IP for SSH (usually 192.168.1.XX):" YOURIP
 	done
 }
-check_GATEWAY () {
-	until [[ $GATEWAY != "" ]]; do
-		echo -e "${R}Can't be empty${N}"
-		read -p "Choose IP for GATEWAY (usallly 192.168.1.1):" GATEWAY
-	done
-}
-check_DNS () {
-	until [[ $DNS != "" ]]; do
-		echo -e "${R}Can't be empty${N}"
-		read -p "Choose IP for NAMESERVER (usally 192.168.1.1):" DNS
-	done
-}
-check_YOURPASS () {
-	until [[ $YOURPASS != "" ]]; do
-		echo -e "${R}Can't be empty${N}"
-		read -p "Choose PASSWORD for SSH installation:" YOURPASS
-	done
-}
-check_EVERYTHING () {
-	printf "%-12s %s\n" Language $LANG1 Keymap $KEYMAP2 Hostname $YOURHOSTNAME Ip $YOURIP Gateway $GATEWAY DNS $DNS Pass $YOURPASS
-	echo -e "${R}Is that correct ?${N} (Choose a number)"
-	select ANSWER1 in "Yes" "No"; do
-		case $ANSWER1 in
-			Yes ) :; break;;
-			No ) echo "Exiting script"; exit;;
-
-		esac
-	done
-}
 create_preseed () {
 printf "#### Contents of the preconfiguration file  \
 \n#### Contents of the preconfiguration file  \
 \n### Localization  \
 \n# Locale sets language and country.  \
-\nd-i debian-installer/locale select $LANG1  \
+\nd-i debian-installer/locale select en_US  \
 \n# Keyboard selection. \
-\nd-i console-keymaps-at/keymap select $KEYMAP2 \
-\nd-i keyboard-configuration/xkb-keymap select $KEYMAP2 \
-\n### Network configuration \
-\n# netcfg will choose an interface that has link if possible. This makes it skip displaying a list if there is more than one interface. \
+\nd-i console-keymaps-at/keymap select us \
+\nd-i keyboard-configuration/xkb-keymap select us \
 \nd-i netcfg/choose_interface select auto \
-\n# Any hostname and domain names assigned from dhcp take precedence over values set here. However, setting the values still prevents the questions from being shown \
-\n# even if values come from dhcp. \
 \nd-i netcfg/get_hostname string useless \
 \nd-i netcfg/get_domain string local \
-\n#Force hostname to DHCP \
-\nd-i netcfg/hostname string $YOURHOSTNAME \
-\n# If you prefer to configure the network manually, uncomment this line and the static network configuration below. \
+\nd-i netcfg/hostname string myhostanme \
 \nd-i netcfg/disable_autoconfig boolean true \
-\n## IPv4 example \
-\nd-i netcfg/get_ipaddress string $YOURIP \
+\nd-i netcfg/get_ipaddress string 192.168.1.9 \
 \nd-i netcfg/get_netmask string 255.255.255.0 \
-\nd-i netcfg/get_gateway string $GATEWAY \
-\nd-i netcfg/get_nameservers string $DNS \
+\nd-i netcfg/get_gateway string 192.168.1.1 \
+\nd-i netcfg/get_nameservers string 192.168.1.1 \
 \nd-i netcfg/confirm_static booleaan true \
+
+\n# Any hostname and domain names assigned from dhcp take precedence over values set here. However, setting the values still prevents the questions from being shown \
+\n# even if values come from dhcp. \
+\n#Force hostname to DHCP \
+\n## IPv4 example \
 \n# If non-free firmware is needed for the network or other hardware, you can \
 \n# configure the installer to always try to load it, without prompting. Or \
 \n# change to false to disable asking. \
@@ -183,16 +146,12 @@ printf "#### Contents of the preconfiguration file  \
 \n#d-i netcfg/dhcp_hostname string radish \
 \nd-i preseed/early_command string anna-install network-console \
 \n# Setup ssh password, login=installer \
-\nd-i network-console/password password $YOURPASS \
-\nd-i network-console/password-again password $YOURPASS" \
+\nd-i network-console/password password pass \
+\nd-i network-console/password-again password pass" \
 > preseed.cfg
 }
 create_iso () {
-	until [[ $YOURISO != "" ]]; do
-		echo -e "${R}Can't be empty${N}"
-		read -p "Choose your ISO name:" YOURISO
-	done
-xorriso	-as mkisofs -o $YOURISO.iso \
+xorriso	-as mkisofs -o isoname.iso \
 	-isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
 	-c isolinux/boot.cat -b isolinux/isolinux.bin -no-emul-boot \
 	-boot-load-size 4 -boot-info-table isonew
@@ -206,18 +165,10 @@ check_SUDO
 check_OPTION $1
 check_PACKAGES
 check_packages
-check_file
 create_folder
 edit_path_select
 edit_auto_select
-check_LANG1
-check_KEYMAP2
-check_YOURHOSTNAME
-check_YOURIP
-check_GATEWAY
-check_DNS
 check_YOURPASS
-check_EVERYTHING
 create_preseed
 md5sum $(find -follow -type f) > md5sum.txt
 cd -
