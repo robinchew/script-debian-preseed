@@ -141,6 +141,27 @@ printf "#### Contents of the preconfiguration file  \
 \n# The wacky dhcp hostname that some ISPs use as a password of sorts. \
 \n#d-i netcfg/dhcp_hostname string radish \
 \nd-i time/zone string Australia/Perth \
+
+\nd-i clock-setup/ntp boolean false \
+
+\nd-i partman-auto/init_automatically_partition select biggest_free \
+\nd-i partman-auto/disk string /dev/sda \
+\nd-i partman-auto/method string regular \
+\nd-i partman-auto/choose_recipe select atomic \
+\nd-i partman/choose_partition select finish \
+\nd-i partman/confirm boolean true \
+\nd-i partman/confirm_nooverwrite boolean true \
+\nd-i partman-partitioning/confirm_write_new_label boolean true \
+
+\nd-i apt-setup/use_mirror boolean false \
+\npopularity-contest popularity-contest/participate boolean false \
+\ntasksel tasksel/first multiselect standard \
+
+\nd-i grub-installer/only_debian boolean true \
+\nd-i grub-installer/bootdev  string default \
+
+\nd-i finish-install/reboot_in_progress note \
+
 \nd-i passwd/user-fullname string Pos Admin \
 \nd-i passwd/username string user1 \
 \nd-i passwd/user-password password userp \
@@ -148,6 +169,7 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i passwd/root-password password r00tme \
 \nd-i passwd/root-password-again password r00tme" \
 > preseed.cfg
+ls -alh
 }
 create_iso () {
 xorriso	-as mkisofs -o isoname.iso \
@@ -167,7 +189,6 @@ check_packages
 create_folder
 edit_path_select
 edit_auto_select
-check_YOURPASS
 create_preseed
 md5sum $(find -follow -type f) > md5sum.txt
 cd -
