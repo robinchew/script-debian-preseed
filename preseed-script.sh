@@ -123,12 +123,6 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i netcfg/get_hostname string useless \
 \nd-i netcfg/get_domain string local \
 \nd-i netcfg/hostname string myhostanme \
-\nd-i netcfg/disable_autoconfig boolean true \
-\nd-i netcfg/get_ipaddress string 192.168.1.9 \
-\nd-i netcfg/get_netmask string 255.255.255.0 \
-\nd-i netcfg/get_gateway string 192.168.1.1 \
-\nd-i netcfg/get_nameservers string 192.168.1.1 \
-\nd-i netcfg/confirm_static booleaan true \
 
 \n# Any hostname and domain names assigned from dhcp take precedence over values set here. However, setting the values still prevents the questions from being shown \
 \n# even if values come from dhcp. \
