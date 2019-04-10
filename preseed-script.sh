@@ -144,10 +144,12 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i hw-detect/load_firmware boolean true \
 \n# The wacky dhcp hostname that some ISPs use as a password of sorts. \
 \n#d-i netcfg/dhcp_hostname string radish \
-\nd-i preseed/early_command string anna-install network-console \
-\n# Setup ssh password, login=installer \
-\nd-i network-console/password password pass \
-\nd-i network-console/password-again password pass" \
+\nd-i passwd/user-fullname string Pos Admin \
+\nd-i passwd/username string user1 \
+\nd-i passwd/user-password password userp \
+\nd-i passwd/user-password-again password userp \
+\nd-i passwd/root-password password r00tme \
+\nd-i passwd/root-password-again password r00tme" \
 > preseed.cfg
 }
 create_iso () {
