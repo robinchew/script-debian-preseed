@@ -55,7 +55,7 @@ create_folder () {
 # Create folder isoorig and isonew
 echo -e "${G}Creating folder for mounting ISO${N}"
 mkdir isoorig
-mount -o loop -t iso9660 /home/robin/debian-9.8.0-i386-xfce-CD-1.iso isoorig
+mount -o loop -t iso9660 /home/robin/debian-9.8.0-i386-netinst.iso isoorig
 echo -e "${G}Copying ISO in isonew to allow write permission${N}"
 mkdir isonew
 rsync -a -H -exclude=TRANS.TBL --chmod=u+rwx isoorig/ isonew
@@ -143,6 +143,11 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i time/zone string Australia/Perth \
 
 \nd-i clock-setup/ntp boolean false \
+
+\n# Don't scan other discs for extra packages
+\nd-i apt-setup/cdrom/set-first boolean false \
+\nd-i apt-setup/cdrom/set-next boolean false \
+\nd-i apt-setup/cdrom/set-failed boolean false \
 
 \nd-i partman-auto/init_automatically_partition select biggest_free \
 \nd-i partman-auto/disk string /dev/sda \
