@@ -144,13 +144,11 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i apt-setup/cdrom/set-failed boolean false \
 
 \nd-i partman-auto/init_automatically_partition select biggest_free \
-\nd-i partman-auto/disk string /dev/sda \
 \nd-i partman-auto/method string regular \
 \nd-i partman-auto/choose_recipe select atomic \
 \nd-i partman/choose_partition select finish \
 \nd-i partman/confirm boolean true \
 \nd-i partman/confirm_nooverwrite boolean true \
-\nd-i partman-partitioning/confirm_write_new_label boolean true \
 
 \nd-i apt-setup/use_mirror boolean false \
 \npopularity-contest popularity-contest/participate boolean false \
