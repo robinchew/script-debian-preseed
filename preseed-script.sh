@@ -116,11 +116,7 @@ check_YOURIP () {
 }
 create_preseed () {
 printf "#### Contents of the preconfiguration file  \
-\n#### Contents of the preconfiguration file  \
-\n### Localization  \
-\n# Locale sets language and country.  \
-\nd-i debian-installer/locale select en_US  \
-\n# Keyboard selection. \
+\nd-i debian-installer/locale select en_AU \
 \nd-i console-keymaps-at/keymap select us \
 \nd-i keyboard-configuration/xkb-keymap select us \
 \nd-i netcfg/choose_interface select auto \
@@ -144,6 +140,7 @@ printf "#### Contents of the preconfiguration file  \
 \nd-i hw-detect/load_firmware boolean true \
 \n# The wacky dhcp hostname that some ISPs use as a password of sorts. \
 \n#d-i netcfg/dhcp_hostname string radish \
+\nd-i time/zone string Australia/Perth \
 \nd-i passwd/user-fullname string Pos Admin \
 \nd-i passwd/username string user1 \
 \nd-i passwd/user-password password userp \
